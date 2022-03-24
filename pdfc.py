@@ -107,10 +107,18 @@ def main():
 
     # In case we want to open the file after compression
     if args.open:
-        if args.out == 'temp.pdf' and args.backup:
-            subprocess.call(["explorer.exe", args.input])
+        if sys.platform == "win32":
+
+            if args.out == 'temp.pdf' and args.backup:
+                subprocess.call(["explorer.exe", args.input])
+            else:
+                subprocess.call(["explorer.exe", args.out])
         else:
-            subprocess.call(["explorer.exe", args.out])
+            if args.out == 'temp.pdf' and args.backup:
+                subprocess.call(["evince", args.input])
+            else:
+                subprocess.call(["evince", args.out])
+
 
 if __name__ == '__main__':
     main()
