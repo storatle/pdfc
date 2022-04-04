@@ -33,12 +33,14 @@ def pdf_merger(fname, newSize, pdf, output):
     if (round(pageDiagonal/newDiagonal,1) == 0.7):
         numNewPages = math.ceil(numPages/2)
         print("# A5 -> A4 or A4 -> A3 , pages = {}".format(numNewPages))
-        indices = [[0,0],[0,1]]
+        indices = [[0,0],[1,0]]
+        rotate = 'landscape'
 
     elif(round(pageDiagonal/newDiagonal,1) == 0.5):
         numNewPages = math.ceil(numPages/4)
         indices = [[0, 1], [1, 1], [0, 0], [1, 0]]
         print("# A6 -> A4 or A5 -> A3, pages = {}".format(numNewPages))
+        rotate = 'portrait'
 
     elif(round(pageDiagonal/newDiagonal,2) == 0.35):
         numNewPages = math.ceil(numPages/8)
@@ -48,9 +50,12 @@ def pdf_merger(fname, newSize, pdf, output):
     
 
     writer = PdfFileWriter()
-    for newPage in range(numNewPages):
         
+    if (rotate == 'portrait'):
         translated_page = PageObject.createBlankPage(None, newWidth, newHeight) 
+    else:
+        translated_page = PageObject.createBlankPage(None, newHeight, newWidth) 
+
 #        num_x = math.ceil(newWidth/pageWidth)
 #        num_y = math.ceil(newHeight/pageHeight)
 #        print('{} , {}'.format(num_x,num_y))
@@ -58,16 +63,18 @@ def pdf_merger(fname, newSize, pdf, output):
         #indices = create_matrix(num_x, num_y)
         #indices = [indices[i] for i in idx]
 
-        i = 0
-        for page in range(numPages):
-            print('{}_page'.format(page+1))
-            sub_page = pdf.getPage(page)
-            translated_page.mergeTranslatedPage(sub_page, indices[i][0]*pageWidth , indices[i][1]*pageHeight)
-            i+=1
-            if (i > len(indices)):
-                i = 0
-                # create page to writer
-                writer.addPage(translated_page)
+    i = 0 
+    for page in range(numPages):
+        print('{}_page'.format(page+1))
+        sub_page = pdf.getPage(page)
+        translated_page.mergeTranslatedPage(sub_page, indices[i][0]*pageWidth , indices[i][1]*pageHeight)
+            #translated_page.mergeTranslatedPage(sub_page, indices[i][0]*pageHeight , indices[i][1]*pageWidth)
+        i+=1
+        if (i > len(indices)-1):
+            print("New page")
+            i = 0
+            # create page to writer
+            writer.addPage(translated_page)
     with open(output, 'wb') as f:
         writer.write(f)
 
