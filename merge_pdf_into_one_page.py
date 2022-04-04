@@ -75,6 +75,10 @@ def pdf_merger(fname, newSize, pdf, output):
             i = 0
             # create page to writer
             writer.addPage(translated_page)
+            if (rotate == 'portrait'):
+                translated_page = PageObject.createBlankPage(None, newWidth, newHeight) 
+            else:
+                translated_page = PageObject.createBlankPage(None, newHeight, newWidth) 
     with open(output, 'wb') as f:
         writer.write(f)
 
