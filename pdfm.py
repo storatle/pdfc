@@ -29,20 +29,25 @@ def pdf_merger(fname, newSize, pdf, output):
 
     # Finn ut hvor mange sider du skal fylle
     print(numPages)
-    print(round(pageDiagonal/newDiagonal,3))
+    print(round(pageDiagonal/newDiagonal,1))
+    if (round(pageDiagonal/newDiagonal,1) == 1.0):
+        if (newSize == 'A4'):
+            print("Øker arkstørrelse til A3")
+            newWidth = 842
+            newHeight = 1190
+            newDiagonal = 1457
+
+        else:
+            print("kan ikke sammenstille denne filen")
     if (round(pageDiagonal/newDiagonal,1) == 0.7):
         numNewPages = math.ceil(numPages/2)
         print("# A5 -> A4 or A4 -> A3 , pages = {}".format(numNewPages))
         indices = create_matrix(2,1)
-        indices = [[0,0],[1,0]]
-        print(indices)
         rotate = 'landscape'
 
     elif(round(pageDiagonal/newDiagonal,1) == 0.5):
         numNewPages = math.ceil(numPages/4)
         indices = create_matrix(2,2)
-        indices = [[0, 1], [1, 1], [0, 0], [1, 0]]
-        print(indices)
         print("# A6 -> A4 or A5 -> A3, pages = {}".format(numNewPages))
         rotate = 'portrait'
 
@@ -76,16 +81,19 @@ def pdf_merger(fname, newSize, pdf, output):
         translated_page.mergeTranslatedPage(sub_page, indices[i][0]*pageWidth , indices[i][1]*pageHeight)
             #translated_page.mergeTranslatedPage(sub_page, indices[i][0]*pageHeight , indices[i][1]*pageWidth)
         i+=1
+        full_page = False
         if (i > len(indices)-1):
             print("New page")
             i = 0
             # create page to writer
             writer.addPage(translated_page)
+            full_page = True
             if (rotate == 'portrait'):
                 translated_page = PageObject.createBlankPage(None, newWidth, newHeight) 
             else:
                 translated_page = PageObject.createBlankPage(None, newHeight, newWidth) 
-    writer.addPage(translated_page)
+    if not full_page:
+        writer.addPage(translated_page)
     with open(output, 'wb') as f:
         writer.write(f)
 
@@ -94,7 +102,7 @@ def create_matrix(n,m):
     for i in range(m,0,-1):
         for j in range(n):
             matrix.append([j,i-1])
-    print(matrix)
+    #print(matrix)
     return matrix
 
 
@@ -122,9 +130,9 @@ def main():
     )
     parser.add_argument('input', help='Relative or absolute path of the input PDF file')
     parser.add_argument('-o', '--out', help='Relative or absolute path of the output PDF file')
-    parser.add_argument('-a', '--size', help='size of out paper a4 or a3')
+    parser.add_argument('-s', '--size', help='size of out paper a4 or a3')
     parser.add_argument('-b', '--backup', action='store_true', help="Backup the old PDF file")
-    parser.add_argument('-s', '--split', action='store_true', help="Split into separate files")
+    parser.add_argument('-p', '--split', action='store_true', help="Split into separate files")
     parser.add_argument('--open', action='store_true', default=False,
                         help='Open PDF after compression')
     args = parser.parse_args()
