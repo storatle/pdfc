@@ -33,17 +33,23 @@ def pdf_merger(fname, newSize, pdf, output):
     if (round(pageDiagonal/newDiagonal,1) == 0.7):
         numNewPages = math.ceil(numPages/2)
         print("# A5 -> A4 or A4 -> A3 , pages = {}".format(numNewPages))
+        indices = create_matrix(2,1)
         indices = [[0,0],[1,0]]
+        print(indices)
         rotate = 'landscape'
 
     elif(round(pageDiagonal/newDiagonal,1) == 0.5):
         numNewPages = math.ceil(numPages/4)
+        indices = create_matrix(2,2)
         indices = [[0, 1], [1, 1], [0, 0], [1, 0]]
+        print(indices)
         print("# A6 -> A4 or A5 -> A3, pages = {}".format(numNewPages))
         rotate = 'portrait'
 
     elif(round(pageDiagonal/newDiagonal,2) == 0.35):
         numNewPages = math.ceil(numPages/8)
+        indices = create_matrix(4,2)
+        rotate = 'landscape'
         print("# A6 -> A3, pages = {}".format(numNewPages))
     else: 
             print("Ukjent størrelse på ark")
@@ -84,9 +90,9 @@ def pdf_merger(fname, newSize, pdf, output):
 
 def create_matrix(n,m):
     matrix = []
-    for i in range(n):
-        for j in range(m):
-            matrix.append([i,j])
+    for i in range(m,0,-1):
+        for j in range(n):
+            matrix.append([j,i-1])
     print(matrix)
     return matrix
 
