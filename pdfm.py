@@ -29,7 +29,7 @@ def pdf_merger(fname, newSize, pdf, output):
 
     # Finn ut hvor mange sider du skal fylle
     print(numPages)
-    print(round(pageDiagonal/newDiagonal,1))
+    print(round(pageDiagonal/newDiagonal,3))
     if (round(pageDiagonal/newDiagonal,1) == 0.7):
         numNewPages = math.ceil(numPages/2)
         print("# A5 -> A4 or A4 -> A3 , pages = {}".format(numNewPages))
@@ -85,6 +85,7 @@ def pdf_merger(fname, newSize, pdf, output):
                 translated_page = PageObject.createBlankPage(None, newWidth, newHeight) 
             else:
                 translated_page = PageObject.createBlankPage(None, newHeight, newWidth) 
+    writer.addPage(translated_page)
     with open(output, 'wb') as f:
         writer.write(f)
 
