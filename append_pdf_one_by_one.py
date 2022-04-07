@@ -1,16 +1,19 @@
-import PyPDF2
+#!/usr/bin/env python
+from PyPDF2 import PdfFileMerger
 import argparse
 
 def PDFmerge(pdfs, output):
-	pdfMerger = PyPDF2.PdfFileMerger()
-	# appending pdfs one by one 
-	for pdf in pdfs:
-		with open(pdf, 'rb') as f:
-			pdfMerger.append(f) 
-		  
+    pdfMerger = PdfFileMerger()
+    # appending pdfs one by one 
+    for pdf in pdfs:
+        print(pdf)
+        with open(pdf, 'rb') as f:
+            pdfMerger.append(f) 
 	# writing combined pdf to output pdf file 
-	with open(output, 'wb') as f:
-		pdfMerger.write(f) 
+        with open(output, 'wb') as f:
+            pdfMerger.write(f) 
+        #pdfMerger.close()
+
 
 def main():
     parser = argparse.ArgumentParser(
@@ -27,7 +30,7 @@ def main():
     pdfs = args.input
     print(args.input)
     output = 'merge_file.pdf'
-    PDFmerge(pdfs=pdfs, output=output)
+    PDFmerge(pdfs, output)
 
 
 if __name__ == "__main__": 
