@@ -1,25 +1,29 @@
 #!/usr/bin/env python
-from PyPDF2 import PdfFileReader, PdfFileMerger, PdfFileWriter
+from PyPDF2 import PdfFileMerger
 import argparse
 
 def PDFmerge(pdfs, output):
     pdfMerger = PdfFileMerger()
-    pdfWriter = PdfFileWriter()
+#    pdfWriter = PdfFileWriter()
 
     # appending pdfs one by one 
     for pdf in pdfs:
         print(pdf)
-        with open(pdf, 'rb') as f:
-            pdfReader = PdfFileReader(f)
-            for pageNum in range(pdfReader.numPages):
-                pageObj = pdfReader.getPage(pageNum)
-                pdfWriter.addPage(pageObj)
+        f = open(pdf,'rb')
+        pdfMerger.append(pdf)
+        #with open(pdf, 'rb') as f:
+#        pdfReader = PdfFileReader(f)
+#        print(pdfReader.numPages)
+#        for pageNum in range(pdfReader.numPages):
+#            pageObj = pdfReader.getPage(pageNum)
+#            pdfWriter.addPage(pageObj)
 
         f.close()
 
 	# writing combined pdf to output pdf file 
     pdfOutputfile = open(output,'wb')
-    pdfWriter.write(pdfOutputfile)
+    pdfMerger.write(pdfOutputfile)
+    #pdfWriter.write(pdfOutputfile)
     pdfOutputfile.close()
 
 def main():
