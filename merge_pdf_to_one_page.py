@@ -144,7 +144,7 @@ def main():
     parser.add_argument('-o', '--out', help='Relative or absolute path of the output PDF file')
     parser.add_argument('-s', '--size', help='size of out paper a4 or a3')
     parser.add_argument('-f', '--fill', action='store_true', default=False, help="Fill page if only one page")
-    parser.add_argument('-p', '--split', action='store_true', help="Split into separate files, and not merge")
+    parser.add_argument('--split', action='store_true', help="Split into separate files, and not merge")
     parser.add_argument('--open', action='store_true', default=False,
                         help='Open PDF after compression')
     args = parser.parse_args()
