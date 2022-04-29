@@ -160,7 +160,7 @@ def main():
     else:
         pdf_merger(fname, args.size, pdf, args.out,args.fill)
  
-    if args.open:
+    if args.open and not args.split:
         if sys.platform == "win32":
             subprocess.call(["explorer.exe", args.out])
         else:

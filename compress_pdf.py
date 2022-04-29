@@ -109,12 +109,12 @@ def main():
     if args.open:
         if sys.platform == "win32":
 
-            if args.out == 'temp.pdf' and args.backup:
+            if args.out == 'temp.pdf' or args.backup:
                 subprocess.call(["explorer.exe", args.input])
             else:
                 subprocess.call(["explorer.exe", args.out])
         else:
-            if args.out == 'temp.pdf' and args.backup:
+            if args.out == 'temp.pdf' or args.backup:
                 subprocess.call(["evince", args.input])
             else:
                 subprocess.call(["evince", args.out])
