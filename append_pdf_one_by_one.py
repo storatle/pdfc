@@ -1,6 +1,12 @@
+"""Append pdf files to one pdf file
+Merge all given files into one pdf-file. 
+Default filenane is merge_file.pdf
+"""
 #!/usr/bin/env python
 from PyPDF2 import PdfFileMerger
 import argparse
+import sys
+import subprocess
 
 def PDFmerge(pdfs, output):
     pdfMerger = PdfFileMerger()
@@ -32,16 +38,22 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument('input', help='Relative or absolute path of the input PDF file', nargs='*')
-    parser.add_argument('-o', '--out', help='Relative or absolute path of the output PDF file')
-    parser.add_argument('-c', '--compress', type=int, help='Compression level from 0 to 4')
-    parser.add_argument('-b', '--backup', action='store_true', help="Backup the old PDF file")
+    parser.add_argument('-o', '--output', default='merge_file.pdf', help='Relative or absolute path of the output PDF file, (default: merge_file.pdf)')
     parser.add_argument('--open', action='store_true', default=False,
-                        help='Open PDF after compression')
+                        help='Open PDF after merging')
     args = parser.parse_args()
     pdfs = args.input
-    print(args.input)
-    output = 'merge_file.pdf'
-    PDFmerge(pdfs, output)
+    PDFmerge(args.input, args.output)
+    print('........................................')
+    print('{} is written'.format(args.output))
+
+
+    if args.open:
+        if sys.platform == "win32":
+            subprocess.call(["explorer.exe", args.output])
+        else:
+            subprocess.call(["evince", args.output])
+
 
 
 if __name__ == "__main__": 
