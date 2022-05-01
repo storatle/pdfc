@@ -160,7 +160,7 @@ def main():
     parser.add_argument('-f', '--fill', action='store_true', default=False, help="Fill page if only one page in input file")
 #    parser.add_argument('--split', action='store_true', help="Split into separate files, and not merge")
     parser.add_argument('--open', action='store_true', default=False,
-                        help='Open PDF after compression')
+                        help='Open PDF after merging')
     args = parser.parse_args()
     pdf = PdfFileReader(args.input)
     fname = os.path.splitext(os.path.basename(args.input))[0]
