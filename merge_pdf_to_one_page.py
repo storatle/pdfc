@@ -1,3 +1,17 @@
+"""Merge pdfs to one page
+Script that merges all pagees in one pdf file to one page
+4 * A6 -> A4
+2 * A5 -> A4
+8 * A6 -> A3
+4 * A5 -> A3
+2 * A4 -> A3
+
+The pages in the input file must have same size and in A6, A5 or A4 format
+If input file has only one page you can fill the page with the -f (--fill) argument
+You can override paper size with -s (--size) argument
+
+"""
+
 #!/usr/bin/env python
 from PyPDF2 import PdfFileReader, PdfFileWriter
 from PyPDF2.pdf import PageObject
@@ -6,7 +20,6 @@ import math
 import argparse
 import subprocess
 import sys
-
 # document: https://pythonhosted.org/PyPDF2/
 def pdf_merger(fname, newSize, pdf, output, fill):
     print("Merge PDF...")
@@ -140,11 +153,12 @@ def main():
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
+
     parser.add_argument('input', help='Relative or absolute path of the input PDF file')
     parser.add_argument('-o', '--out', help='Relative or absolute path of the output PDF file')
-    parser.add_argument('-s', '--size', help='size of out paper a4 or a3')
-    parser.add_argument('-f', '--fill', action='store_true', default=False, help="Fill page if only one page")
-    parser.add_argument('--split', action='store_true', help="Split into separate files, and not merge")
+    parser.add_argument('-s', '--size', help='size of out paper A4 or A3')
+    parser.add_argument('-f', '--fill', action='store_true', default=False, help="Fill page if only one page in input file")
+#    parser.add_argument('--split', action='store_true', help="Split into separate files, and not merge")
     parser.add_argument('--open', action='store_true', default=False,
                         help='Open PDF after compression')
     args = parser.parse_args()
@@ -154,9 +168,8 @@ def main():
         args.size = "A4"
     if not args.out:
         args.out = '{}_out.pdf'.format(fname)
-    
-    if args.split:
-        pdf_splitter(args.input)
+#    if args.split:
+#        pdf_splitter(args.input)
     else:
         pdf_merger(fname, args.size, pdf, args.out,args.fill)
  
