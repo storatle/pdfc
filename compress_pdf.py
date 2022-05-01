@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-# Author: Theeko74
-# Contributor(s): skjerns
-# Oct, 2021
-# MIT license -- free to use as you want, cheers.
-
 """
 Simple python wrapper script to use ghoscript function to compress PDF files.
 
@@ -15,8 +9,13 @@ Compression levels:
     4: screen
 
 Dependency: Ghostscript.
-On MacOSX install via command line `brew install ghostscript`.
 """
+#!/usr/bin/env python3
+# Author: Theeko74
+# Contributor(s): skjerns
+# Oct, 2021
+# MIT license -- free to use as you want, cheers.
+
 
 import argparse
 import subprocess
