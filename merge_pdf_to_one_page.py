@@ -170,8 +170,8 @@ def main():
         args.out = '{}_out.pdf'.format(fname)
 #    if args.split:
 #        pdf_splitter(args.input)
-    else:
-        pdf_merger(fname, args.size, pdf, args.out,args.fill)
+#    else:
+    pdf_merger(fname, args.size, pdf, args.out,args.fill)
  
     if args.open and not args.split:
         if sys.platform == "win32":
