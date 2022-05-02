@@ -57,9 +57,8 @@ def main():
     parser.add_argument('-p', '--page', default=0, help='Split at page number')
 #    parser.add_argument('-s', '--size', help='size of out paper a4 or a3')
 #    parser.add_argument('-f', '--fill', action='store_true', default=False, help="Fill page if only one page")
-    parser.add_argument('--split', action='store_true', help="Split into separate files, and not merge")
-    parser.add_argument('--open', action='store_true', default=False,
-                        help='Open PDF after compression')
+#    parser.add_argument('--split', action='store_true', help="Split into separate files, and not merge")
+    parser.add_argument('--open', action='store_true', default=False, help='Open PDF after compression')
     args = parser.parse_args()
     pdf = PdfFileReader(args.input)
     fname = os.path.splitext(os.path.basename(args.input))[0]
@@ -68,10 +67,10 @@ def main():
     if not args.out:
         args.out = '{}_out.pdf'.format(fname)
 
-    if args.split:
-        pdf_splitter(args.input, int(args.page))
- #   else:
- #       pdf_merger(fname, args.size, pdf, args.out,args.fill)
+#    if args.split:
+    pdf_splitter(args.input, int(args.page))
+#    else:
+#        pdf_merger(fname, args.size, pdf, args.out,args.fill)
  
     if args.open and not args.split:
         if sys.platform == "win32":
