@@ -21,12 +21,13 @@ import argparse
 import subprocess
 import sys
 # document: https://pythonhosted.org/PyPDF2/
-def pdf_merger(fname, newSize, pdf, output, fill):
+def pdf_merger(fname, newSize, pdf, output, fill, rotate):
     print("Merge PDF...")
     numPages = pdf.getNumPages()
     pageWidth = math.ceil(pdf.getPage(0).mediaBox.getWidth())
     pageHeight = math.ceil(pdf.getPage(0).mediaBox.getHeight())
     pageDiagonal = math.sqrt(pageWidth**2 + pageHeight**2)
+    print('pageWidth: {}, pageHeight: {}, pageDiagonal: {}'.format(pageWidth,pageHeight,pageDiagonal))
 
     numNewPages = 1 
     if (newSize == 'A4'):
@@ -40,7 +41,7 @@ def pdf_merger(fname, newSize, pdf, output, fill):
         newHeight = 1190
         newDiagonal = 1457
 
-    #print('newWidth: {}, newHeight: {}, newDiagonal: {}'.format(newWidth,newHeight,newDiagonal))
+    print('newWidth: {}, newHeight: {}, newDiagonal: {}'.format(newWidth,newHeight,newDiagonal))
     print('........................................')
     print('Numer of pages to merge: {}'.format(numPages))
     print('Input file: {}.pdf, size: {}'.format(fname,newSize))
@@ -58,8 +59,12 @@ def pdf_merger(fname, newSize, pdf, output, fill):
     if (round(pageDiagonal/newDiagonal,1) == 0.7):
         numNewPages = math.ceil(numPages/2)
         print("A5 -> A4 or A4 -> A3 , {} pages".format(numNewPages))
-        indices = create_matrix(2,1)
-        rotate = 'landscape'
+        if rotate:  # I tilfellet man har landscape
+            indices = create_matrix(1,2)
+            rotate = 'portrait'
+        else:
+            indices = create_matrix(2,1)
+            rotate = 'landscape'
 
     elif(round(pageDiagonal/newDiagonal,1) == 0.5):
         numNewPages = math.ceil(numPages/4)
@@ -158,6 +163,7 @@ def main():
     parser.add_argument('-o', '--out', help='Relative or absolute path of the output PDF file')
     parser.add_argument('-s', '--size', help='size of out paper A4 or A3')
     parser.add_argument('-f', '--fill', action='store_true', default=False, help="Fill page if only one page in input file")
+    parser.add_argument('-r', '--rotate', action='store_true', default=False, help="Set orientation of original file.")
 #    parser.add_argument('--split', action='store_true', help="Split into separate files, and not merge")
     parser.add_argument('--open', action='store_true', default=False,
                         help='Open PDF after merging')
@@ -171,7 +177,7 @@ def main():
 #    if args.split:
 #        pdf_splitter(args.input)
 #    else:
-    pdf_merger(fname, args.size, pdf, args.out,args.fill)
+    pdf_merger(fname, args.size, pdf, args.out,args.fill,args.rotate)
  
     if args.open: # and not args.split:
         if sys.platform == "win32":

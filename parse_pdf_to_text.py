@@ -1,3 +1,7 @@
+"""Parse text from a pdf file
+The text will be placed in a text fiel with the same name as pdf file
+
+"""
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 import argparse
@@ -26,6 +30,7 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 # Denne trenger java installert så jeg dropper den
 #from tika import parser # pip install tika
 #filename = 'energi21'
