@@ -13,8 +13,8 @@ You can override paper size with -s (--size) argument
 """
 
 #!/usr/bin/env python
-from PyPDF2 import PdfFileReader, PdfFileWriter
-from PyPDF2.pdf import PageObject
+from PyPDF2 import PdfReader, PdfWriter
+from PyPDF2 import PageObject
 import os
 import math
 import argparse
@@ -23,9 +23,9 @@ import sys
 # document: https://pythonhosted.org/PyPDF2/
 def pdf_merger(fname, newSize, pdf, output, fill, rotate):
     print("Merge PDF...")
-    numPages = pdf.getNumPages()
-    pageWidth = math.ceil(pdf.getPage(0).mediaBox.getWidth())
-    pageHeight = math.ceil(pdf.getPage(0).mediaBox.getHeight())
+    numPages = len(pdf.pages)
+    pageWidth = math.ceil(pdf.pages[0].mediabox.width)
+    pageHeight = math.ceil(pdf.pages[0].mediabox.height)
     pageDiagonal = math.sqrt(pageWidth**2 + pageHeight**2)
     print('pageWidth: {}, pageHeight: {}, pageDiagonal: {}'.format(pageWidth,pageHeight,pageDiagonal))
 
@@ -82,12 +82,12 @@ def pdf_merger(fname, newSize, pdf, output, fill, rotate):
     
 
     print('........................................')
-    writer = PdfFileWriter()
+    writer = PdfWriter()
         
     if (rotate == 'portrait'):
-        translated_page = PageObject.createBlankPage(None, newWidth, newHeight) 
+        translated_page = PageObject.create_blank_page(None, newWidth, newHeight) 
     else:
-        translated_page = PageObject.createBlankPage(None, newHeight, newWidth) 
+        translated_page = PageObject.create_blank_page(None, newHeight, newWidth) 
     i = 0
     if fill:
         if (numPages == 1):
@@ -95,7 +95,7 @@ def pdf_merger(fname, newSize, pdf, output, fill, rotate):
             fullPage = True
             for i in range(len(indices)): # Arket blir fyllt opp
                 print('{}_part'.format(page+1))
-                sub_page = pdf.getPage(page)
+                sub_page = pdf.pages[page]
                 translated_page.mergeTranslatedPage(sub_page, indices[i][0]*pageWidth , indices[i][1]*pageHeight)
                 #translated_page.mergeTranslatedPage(sub_page, indices[i][0]*pageHeight , indices[i][1]*pageWidth)
             writer.addPage(translated_page)
@@ -105,7 +105,7 @@ def pdf_merger(fname, newSize, pdf, output, fill, rotate):
     else:
         for page in range(numPages):
             print('{}_part'.format(page+1))
-            sub_page = pdf.getPage(page)
+            sub_page = pdf.pages[page]
             translated_page.mergeTranslatedPage(sub_page, indices[i][0]*pageWidth , indices[i][1]*pageHeight)
             #translated_page.mergeTranslatedPage(sub_page, indices[i][0]*pageHeight , indices[i][1]*pageWidth)
             i+=1
@@ -145,7 +145,7 @@ def pdf_splitter(path):
     pdf = PdfFileReader(path)
     for page in range(pdf.getNumPages()):
         pdf_writer = PdfFileWriter()
-        pdf_writer.addPage(pdf.getPage(page))
+        pdf_writer.addPage(pdf.pages[page])
         output_filename = '{}_page_{}.pdf'.format(
             fname, page+1)
 
@@ -168,7 +168,7 @@ def main():
     parser.add_argument('--open', action='store_true', default=False,
                         help='Open PDF after merging')
     args = parser.parse_args()
-    pdf = PdfFileReader(args.input)
+    pdf = PdfReader(args.input)
     fname = os.path.splitext(os.path.basename(args.input))[0]
     if not args.size:
         args.size = "A4"
