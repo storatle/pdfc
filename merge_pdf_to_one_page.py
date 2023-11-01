@@ -13,7 +13,7 @@ You can override paper size with -s (--size) argument
 """
 
 #!/usr/bin/env python
-from PyPDF2 import PdfReader, PdfWriter
+from PyPDF2 import PdfReader, PdfWriter, Transformation
 from PyPDF2 import PageObject
 import os
 import math
@@ -96,7 +96,8 @@ def pdf_merger(fname, newSize, pdf, output, fill, rotate):
             for i in range(len(indices)): # Arket blir fyllt opp
                 print('{}_part'.format(page+1))
                 sub_page = pdf.pages[page]
-                translated_page.mergeTranslatedPage(sub_page, indices[i][0]*pageWidth , indices[i][1]*pageHeight)
+                sub_page.add_transformation(Transformation().translate(indices[i][0]*pageWidth , indices[i][1]*pageHeight))
+                translated_page.merge_page(sub_page)
                 #translated_page.mergeTranslatedPage(sub_page, indices[i][0]*pageHeight , indices[i][1]*pageWidth)
             writer.addPage(translated_page)
                 
@@ -106,7 +107,9 @@ def pdf_merger(fname, newSize, pdf, output, fill, rotate):
         for page in range(numPages):
             print('{}_part'.format(page+1))
             sub_page = pdf.pages[page]
-            translated_page.mergeTranslatedPage(sub_page, indices[i][0]*pageWidth , indices[i][1]*pageHeight)
+            sub_page.add_transformation(Transformation().translate(indices[i][0]*pageWidth , indices[i][1]*pageHeight))
+            #translated_page.mergeTranslatedPage(sub_page, indices[i][0]*pageWidth , indices[i][1]*pageHeight)
+            translated_page.merge_page(sub_page)
             #translated_page.mergeTranslatedPage(sub_page, indices[i][0]*pageHeight , indices[i][1]*pageWidth)
             i+=1
             fullPage = False
@@ -142,7 +145,7 @@ def pdf_splitter(path):
 
     fname = os.path.splitext(os.path.basename(path))[0]
 
-    pdf = PdfFileReader(path)
+    pdf = PdfeReader(path)
     for page in range(pdf.getNumPages()):
         pdf_writer = PdfFileWriter()
         pdf_writer.addPage(pdf.pages[page])
