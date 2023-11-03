@@ -117,14 +117,14 @@ def pdf_merger(fname, newSize, pdf, output, fill, rotate):
     #            print("New page")
                 i = 0
                 # create page to writer
-                writer.addPage(translated_page)
+                writer.add_page(translated_page)
                 fullPage = True
                 if (rotate == 'portrait'):
-                    translated_page = PageObject.createBlankPage(None, newWidth, newHeight) 
+                    translated_page = PageObject.create_blank_page(None, newWidth, newHeight) 
                 else:
-                    translated_page = PageObject.createBlankPage(None, newHeight, newWidth) 
+                    translated_page = PageObject.create_blank_page(None, newHeight, newWidth) 
     if not fullPage:
-        writer.addPage(translated_page)
+        writer.add_page(translated_page)
     with open(output, 'wb') as f:
         writer.write(f)
     
