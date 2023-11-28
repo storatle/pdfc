@@ -3,13 +3,13 @@ Merge all given files into one pdf-file.
 Default filenane is merge_file.pdf
 """
 #!/usr/bin/env python
-from PyPDF2 import PdfFileMerger
+from PyPDF2 import PdfMerger
 import argparse
 import sys
 import subprocess
 
 def PDFmerge(pdfs, output):
-    pdfMerger = PdfFileMerger()
+    pdfMerger = PdfMerger()
 #    pdfWriter = PdfFileWriter()
 
     # appending pdfs one by one 
