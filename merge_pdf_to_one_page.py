@@ -1,5 +1,5 @@
 """Merge pdfs to one page
-Script that merges all pagees in one pdf file to one page
+Script that merges all pages in one pdf file to one page
 4 * A6 -> A4
 2 * A5 -> A4
 8 * A6 -> A3
@@ -77,6 +77,14 @@ def pdf_merger(fname, newSize, pdf, output, fill, rotate):
         indices = create_matrix(4,2)
         rotate = 'landscape'
         print("A6 -> A3, {} pages".format(numNewPages))
+
+    elif(round(pageDiagonal/newDiagonal,2) == 0.25):
+        numNewPages = math.ceil(numPages/10)
+        indices = create_matrix(6,4)
+        rotate = 'portrait'
+        print("A7 -> A4, {} pages".format(numNewPages))
+    
+
     else: 
             print("Ukjent størrelse på ark")
     
